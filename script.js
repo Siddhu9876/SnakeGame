@@ -206,3 +206,18 @@ function updateHighScore() {
     }
     highScoreText.style.display = 'block';
 }
+for(let i = 0; i < snake.length; i++) {
+    const segment = document.createElement('div');
+    segment.classList.add('snake');
+
+    if(i === 0) {
+        segment.classList.add('head');
+    } else if (i === snake.length - 1) {
+        segment.classList.add('tail');
+    } else {
+        segment.classList.add('body');
+    }
+
+    // Add to board
+    gameBoard.appendChild(segment);
+}

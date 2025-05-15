@@ -4,87 +4,244 @@ body {
     justify-content: center;
     height: 100vh;
     margin: 0;
+    background-color: #8fcf58; /* soft green background */
     font-family: 'VT323', monospace;
-}
-
-body,
-.snake {
-    background-color: #414141;
+    color: #333;
+    position: relative;
+    overflow: hidden;
 }
 
 #game-board {
-    border-radius: 100px;
     display: grid;
-    grid-template-columns: repeat(20, 20px);
-    grid-template-rows: repeat(20, 20px);
-    margin: 5px;
+    grid-template-columns: repeat(20, 25px);
+    grid-template-rows: repeat(20, 25px);
+    gap: 1px;
+    background: linear-gradient(45deg, #9bd451 25%, transparent 25%), 
+                linear-gradient(-45deg, #9bd451 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #9bd451 75%),
+                linear-gradient(-45deg, transparent 75%, #9bd451 75%);
+    background-size: 50px 50px;
+    background-position: 0 0, 0 25px, 25px -25px, -25px 0;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
 
-.game-border-1 {
-    border: #0f0f0e solid 10px;
-    border-radius: 30px;
-    box-shadow: inset 0 0 0 10px #595f43;
+.snake {
+    background: linear-gradient(135deg, #3a87ad, #2a6698);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* rounded oval shape */
+    box-shadow: 0 0 10px #2a6698, inset 0 2px 5px #5fa2d0;
+    position: relative;
+    transition: background 0.3s ease;
 }
 
-.game-border-2 {
-    border: #0c0c0b solid 8px;
-    border-radius: 26px;
-    box-shadow: inset 0 0 0 10px #abb78a;
+.snake.head::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 7px;
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    box-shadow:
+      6px 0 white;
+    animation: blink 2s infinite;
 }
 
-.game-border-3 {
-    border: #080b02 solid 30px;
-    border-radius: 20px;
-    box-shadow: inset 0 0 0 5px #8b966c;
+@keyframes blink {
+    0%, 100% {opacity: 1;}
+    50% {opacity: 0.3;}
+}
+
+.food {
+    background: radial-gradient(circle at 30% 30%, #ff4b4b, #d60000);
+    border-radius: 50%;
+    box-shadow:
+        0 0 12px #ff4b4b,
+        inset 0 2px 4px #9a0000;
+    position: relative;
+}
+
+.food::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 10px;
+    width: 5px;
+    height: 8px;
+    background: #228b22;
+    border-radius: 3px 3px 0 0;
+    transform: rotate(-20deg);
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+}
+
+.scores {
+    width: 320px;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 28px;
+    color: #2a6698;
+    text-shadow: 0 0 5px #6ba6d1;
+}
+
+#score, #highScore {
+    user-select: none;
+}
+
+#highScore {
+    color: #fbc02d;
+    text-shadow: 0 0 10px #fbc02d;
+    display: block;
 }
 
 #instruction-text {
     position: absolute;
-    top: 60%;
-    color: #ed7f7f;
-    width: 300px;
+    top: 75%;
+    color: #444;
+    width: 320px;
     text-align: center;
-    text-transform: capitalize;
-    padding: 30px;
-    margin: 0;
-}
-
-.scores {
-    display: flex;
-    justify-content: space-between;
-}
-
-#score {
-    color: #51e676;
-}
-
-#score,
-#highScore {
-    font-size: 40px;
-    font-weight: bolder;
-    margin: 10px 0;
-}
-
-#highScore {
-    color: #d8ddca;
-    display: none;
-}
-
-.game-border-3,
-#logo {
-    background-color: #c4cfa3;
-}
-
-.snake {
-    border: #5a5a5a 1px dotted;
-}
-
-.food {
-    background-color: #dedede;
-    border: #999 5px solid;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px;
+    background: rgba(255,255,255,0.85);
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    pointer-events: none;
 }
 
 #logo {
     position: absolute;
-    margin: 0 0 55px 0; 
+    top: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'VT323', monospace;
+    font-size: 48px;
+    font-weight: 900;
+    color: #2a6698;
+    text-shadow: 0 0 12px #2a6698;
+    user-select: none;
 }
+.snake {
+  background: linear-gradient(135deg, #2a6b36 40%, #4caf50 60%);
+  position: relative;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.3);
+  transition: all 0.15s ease;
+}
+
+/* HEAD styling */
+.snake.head {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: linear-gradient(135deg, #3c7d3c, #6bbe48);
+  box-shadow: 0 0 10px #3c7d3c inset, 0 2px 8px rgba(0,0,0,0.5);
+}
+
+/* eyes on the head */
+.snake.head::before,
+.snake.head::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 2px black;
+}
+
+.snake.head::before {
+  left: 5px;
+}
+
+.snake.head::after {
+  right: 5px;
+}
+
+/* BODY styling */
+.snake.body {
+  border-radius: 30% / 50%;
+  background: linear-gradient(135deg, #2e6e2e 40%, #4caf50 60%);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* TAIL styling */
+.snake.tail {
+  border-radius: 60% 40% 40% 60% / 50% 70% 30% 50%;
+  background: linear-gradient(135deg, #2a6b36 40%, #388e3c 60%);
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.4);
+}
+.snake.head {
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: linear-gradient(135deg, #3c7d3c, #6bbe48);
+  box-shadow: 0 0 10px #3c7d3c inset, 0 2px 8px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+/* Eyes */
+.snake.head::before,
+.snake.head::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 2px black;
+  z-index: 10;
+}
+
+.snake.head::before {
+  left: 5px;
+}
+
+.snake.head::after {
+  right: 5px;
+}
+
+/* Pupils */
+.snake.head .pupil-left,
+.snake.head .pupil-right {
+  position: absolute;
+  top: 8px;
+  width: 3px;
+  height: 3px;
+  background: black;
+  border-radius: 50%;
+  z-index: 11;
+}
+
+.snake.head .pupil-left {
+  left: 7px;
+}
+
+.snake.head .pupil-right {
+  right: 7px;
+}
+
+/* Tongue */
+.snake.head .tongue {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 6px;
+  height: 10px;
+  background: #e53935;
+  border-radius: 3px 3px 0 0;
+  transform: translateX(-50%);
+  animation: tongue-flick 1s infinite alternate;
+  z-index: 12;
+}
+
+/* Tongue flick animation */
+@keyframes tongue-flick {
+  0% {
+    transform: translateX(-50%) translateY(0);
+  }
+  100% {
+    transform: translateX(-50%) translateY(4px);
+  }
+}
+
